@@ -1,4 +1,4 @@
-package vBlog
+package server
 
 import (
 	"github.com/gin-gonic/gin"

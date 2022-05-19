@@ -1,4 +1,4 @@
-package vBlog
+package server
 
 import (
 	"github.com/BurntSushi/toml"
@@ -7,7 +7,7 @@ import (
 var Conf = new(AppConfig)
 
 const (
-	configFilepath = "./configs/config.toml"
+	configFilepath = "./configs/conf.toml"
 )
 
 type AppConfig struct {
