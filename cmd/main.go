@@ -3,18 +3,18 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lemonlzy/vegetableBlog/cmd/vegetableBlog"
+	"github.com/lemonlzy/vegetableBlog/cmd/vBlog"
 )
 
 func main() {
-	err := vegetableBlog.Init()
+	err := vBlog.Init()
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	engine := gin.New()
-	vegetableBlog.Register(engine)
-	err = engine.Run(":" + vegetableBlog.Conf.Port)
+	vBlog.Register(engine)
+	err = engine.Run(":" + vBlog.Conf.Port)
 	if err != nil {
 		fmt.Println(err)
 	}

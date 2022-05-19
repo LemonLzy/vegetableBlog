@@ -1,4 +1,4 @@
-package vegetableBlog
+package vBlog
 
 import (
 	"github.com/gin-gonic/gin"
