@@ -1,0 +1,30 @@
+name = "vegetableBlog"
+mode = "dev"
+port = "8081"
+version = "v0.0.1"
+since_time = "2022-05-19"
+
+[log]
+level = "debug"
+filename = "log/vegetableBlog.log"
+max_size = 200
+max_age = 30
+max_backups = 7
+
+[db]
+host = "127.0.0.1"
+port = 3306
+user = "root"
+password = "root"
+db_name = "vegetableBlog"
+table_prefix = "v_"
+max_open_conns = 10
+max_idle_conns = 200
+migrate_table = true
+
+[cache]
+host = "root"
+port = 6379
+password = "root"
+db = 0
+poolsize = 100
