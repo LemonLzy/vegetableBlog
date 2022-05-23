@@ -37,6 +37,7 @@ func Init(cfg *conf.DBConfig) (err error) {
 		return
 	}
 
+	// 根据Models结构体初始化数据库表
 	if cfg.MigrateTable {
 		if err = db.AutoMigrate(getModels()...); err != nil {
 			return
