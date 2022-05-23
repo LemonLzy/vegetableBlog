@@ -5,7 +5,7 @@ type User struct {
 	Username  string `json:"username,omitempty"`
 	Password  string `json:"password,omitempty"`
 	Nickname  string `json:"nickname,omitempty"`
-	Role      string `json:"role,omitempty"`
+	IsAdmin   bool   `json:"is_admin,omitempty"`
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }
