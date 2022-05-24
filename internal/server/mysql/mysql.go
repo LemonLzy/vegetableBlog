@@ -2,7 +2,6 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/lemonlzy/vegetableBlog/internal/app"
 	"github.com/lemonlzy/vegetableBlog/internal/server/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -12,7 +11,7 @@ import (
 	"os"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 
 func Init(cfg *conf.DBConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -22,7 +21,7 @@ func Init(cfg *conf.DBConfig) (err error) {
 		cfg.Port,
 		cfg.DBName,
 	)
-	db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true, // 禁用自动创建外键
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
@@ -33,20 +32,20 @@ func Init(cfg *conf.DBConfig) (err error) {
 		}})
 
 	if err != nil {
-		log.Printf("db init err: %v\n", err)
+		log.Printf("DB init err: %v\n", err)
 		return
 	}
 
-	// 根据Models结构体初始化数据库表
-	if cfg.MigrateTable {
-		if err = db.AutoMigrate(getModels()...); err != nil {
-			return
-		}
-	}
+	//// 根据Models结构体初始化数据库表
+	//if cfg.MigrateTable {
+	//	if err = DB.AutoMigrate(getModels()...); err != nil {
+	//		return
+	//	}
+	//}
 
-	sqlDB, err := db.DB()
+	sqlDB, err := DB.DB()
 	if err != nil {
-		log.Printf("db init err: %v\n", err)
+		log.Printf("DB init err: %v\n", err)
 		return
 	}
 	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
@@ -57,10 +56,10 @@ func Init(cfg *conf.DBConfig) (err error) {
 	return
 }
 
-func getModels() []interface{} {
-	return []interface{}{
-		&app.User{},
-		&app.Tag{},
-		&app.Article{},
-	}
-}
+//func getModels() []interface{} {
+//	return []interface{}{
+//		&app.User{},
+//		&app.Tag{},
+//		&app.Article{},
+//	}
+//}

@@ -1,5 +1,10 @@
 package app
 
+import (
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
+	"github.com/lemonlzy/vegetableBlog/internal/server/mysql"
+)
+
 type Article struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
 	TagID     int    `json:"tag_id,omitempty" gorm:"comment: 标签ID"`
@@ -14,6 +19,13 @@ type Article struct {
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }
 
-func CreateArticle() error {
+func CreateArticle(a *Article) error {
+	// 生成文章ID
+	a.ArticleID = snowflake.GenID()
+	// 数据库创建
+	if err := mysql.DB.Debug().Create(a).Error; err != nil {
+		// 日志记录
+		return err
+	}
 	return nil
 }

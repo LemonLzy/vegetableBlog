@@ -14,8 +14,7 @@ func Register(engine *gin.Engine) {
 		})
 	})
 
-	r := gin.New()
-	v1 := r.Group("/api/v1")
+	v1 := engine.Group("/api/v1")
 
 	{
 		v1.GET("/article:id", handler.ArticleDetailHandler)
