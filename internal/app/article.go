@@ -1,4 +1,4 @@
-package biz
+package app
 
 type Article struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
@@ -12,4 +12,8 @@ type Article struct {
 	RichText  string `json:"rich_text,omitempty" gorm:"comment: 文章富文本内容"`
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
+}
+
+func CreateArticle() error {
+	return nil
 }

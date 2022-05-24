@@ -1,4 +1,4 @@
-package biz
+package app
 
 type User struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`

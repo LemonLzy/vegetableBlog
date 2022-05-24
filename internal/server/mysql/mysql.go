@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"fmt"
-	"github.com/lemonlzy/vegetableBlog/internal/biz"
+	"github.com/lemonlzy/vegetableBlog/internal/app"
 	"github.com/lemonlzy/vegetableBlog/internal/server/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -59,8 +59,8 @@ func Init(cfg *conf.DBConfig) (err error) {
 
 func getModels() []interface{} {
 	return []interface{}{
-		&biz.User{},
-		&biz.Tag{},
-		&biz.Article{},
+		&app.User{},
+		&app.Tag{},
+		&app.Article{},
 	}
 }
