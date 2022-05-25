@@ -20,6 +20,7 @@ type Article struct {
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }
 
+// CreateArticle 创建文章
 func CreateArticle(a *Article) error {
 	// 生成文章ID
 	a.ArticleID = snowflake.GenID()
@@ -31,6 +32,7 @@ func CreateArticle(a *Article) error {
 	return nil
 }
 
+// GetArticleDetail 根据文章id获取文章详情
 func GetArticleDetail(articleID int64) (*Article, error) {
 	a := new(Article)
 	if err := mysql.DB.Debug().Where("article_id = ?", articleID).First(&a).Error; err != nil {
@@ -39,4 +41,14 @@ func GetArticleDetail(articleID int64) (*Article, error) {
 		}
 	}
 	return a, nil
+}
+
+func GetArticleList(page, size int64) ([]*Article, error) {
+	var articles []*Article
+	if err := mysql.DB.Debug().Where("status != ?", 2).Offset(int((page - 1) * size)).Order("updated_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, err
+		}
+	}
+	return articles, nil
 }
