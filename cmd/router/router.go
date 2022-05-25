@@ -17,8 +17,9 @@ func Register(engine *gin.Engine) {
 	v1 := engine.Group("/api/v1")
 
 	{
-		v1.GET("/article:id", handler.ArticleDetailHandler)
+		v1.GET("/article/:id", handler.ArticleDetailHandler)
 		v1.GET("/articles", handler.ArticleListHandler)
 		v1.POST("/article", handler.CreateArticleHandler)
+		v1.PUT("/article/:id", handler.ModifyArticleHandler)
 	}
 }
