@@ -43,6 +43,7 @@ func GetArticleDetail(articleID int64) (*Article, error) {
 	return a, nil
 }
 
+// GetArticleList 获取所有文章
 func GetArticleList(page, size int64) ([]*Article, error) {
 	var articles []*Article
 	if err := mysql.DB.Debug().Where("status != ?", 2).Offset(int((page - 1) * size)).Order("updated_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
@@ -51,4 +52,14 @@ func GetArticleList(page, size int64) ([]*Article, error) {
 		}
 	}
 	return articles, nil
+}
+
+// UpdateArticleByID 更新文章信息
+func UpdateArticleByID(articleID int64, a *Article) error {
+	if err := mysql.DB.Debug().Where("article_id = ?", articleID).Updates(a).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return err
+		}
+	}
+	return nil
 }
