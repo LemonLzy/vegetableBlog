@@ -12,13 +12,19 @@ import (
 var ossClient = genClient()
 
 func getCosID() string {
-	SecretID := os.Getenv("COS_SecretID")
+	SecretID, ok := os.LookupEnv("COS_SecretID")
+	if !ok {
+		fmt.Println("COS_SecretID not set")
+	}
 	fmt.Println(SecretID)
 	return SecretID
 }
 
 func getCosKey() string {
-	SecretKey := os.Getenv("COS_SecretKey")
+	SecretKey, ok := os.LookupEnv("COS_SecretKey")
+	if !ok {
+		fmt.Println("COS_SecretKey not set")
+	}
 	fmt.Println(SecretKey)
 	return SecretKey
 }
