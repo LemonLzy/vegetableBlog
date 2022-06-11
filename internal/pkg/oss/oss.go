@@ -44,7 +44,7 @@ func getCosURL() string {
 // genClient 初始化COS对象
 func genClient() *cos.Client {
 	// https://cloud.tencent.com/document/product/436/31215
-	u, _ := url.Parse("https://blog-1300597227.cos.ap-guangzhou.myqcloud.com")
+	u, _ := url.Parse(CosURL)
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{

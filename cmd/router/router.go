@@ -1,16 +1,26 @@
 package router
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/cmd/router/handler"
 	"net/http"
+	"os"
 )
 
 func Register(engine *gin.Engine) {
-	engine.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"code":    0,
-			"message": "成功",
+	err := engine.SetTrustedProxies([]string{"127.0.0.1"})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	indexPath, staticPath := getStaticPath()
+	engine.LoadHTMLFiles(indexPath)
+	engine.StaticFS("./static", http.Dir(staticPath))
+	engine.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "baidu.com",
 		})
 	})
 
@@ -26,4 +36,12 @@ func Register(engine *gin.Engine) {
 	{
 		oss.POST("/upload", handler.OssPostHandler)
 	}
+}
+
+func getStaticPath() (string, string) {
+	projectPath, _ := os.Getwd()
+	indexPath := projectPath + "/web/index.html"
+	staticPath := projectPath + "/web/static"
+	fmt.Println(projectPath, indexPath, staticPath)
+	return indexPath, staticPath
 }
