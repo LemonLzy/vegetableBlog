@@ -2,6 +2,7 @@ package mysql
 
 import (
 	"fmt"
+	"github.com/lemonlzy/vegetableBlog/internal/app"
 	"github.com/lemonlzy/vegetableBlog/internal/server/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -11,8 +12,6 @@ import (
 	"os"
 )
 
-var DB *gorm.DB
-
 func Init(cfg *conf.DBConfig) (err error) {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local",
 		cfg.User,
@@ -21,7 +20,7 @@ func Init(cfg *conf.DBConfig) (err error) {
 		cfg.Port,
 		cfg.DBName,
 	)
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+	app.DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		DisableForeignKeyConstraintWhenMigrating: true, // 禁用自动创建外键
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags),
@@ -36,14 +35,14 @@ func Init(cfg *conf.DBConfig) (err error) {
 		return
 	}
 
-	//// 根据Models结构体初始化数据库表
-	//if cfg.MigrateTable {
-	//	if err = DB.AutoMigrate(getModels()...); err != nil {
-	//		return
-	//	}
-	//}
+	// 根据Models结构体初始化数据库表
+	if cfg.MigrateTable {
+		if err = app.DB.AutoMigrate(getModels()...); err != nil {
+			return
+		}
+	}
 
-	sqlDB, err := DB.DB()
+	sqlDB, err := app.DB.DB()
 	if err != nil {
 		log.Printf("DB init err: %v\n", err)
 		return
@@ -56,10 +55,10 @@ func Init(cfg *conf.DBConfig) (err error) {
 	return
 }
 
-//func getModels() []interface{} {
-//	return []interface{}{
-//		&app.User{},
-//		&app.Tag{},
-//		&app.Article{},
-//	}
-//}
+func getModels() []interface{} {
+	return []interface{}{
+		&app.User{},
+		&app.Tag{},
+		&app.Article{},
+	}
+}

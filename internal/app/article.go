@@ -2,7 +2,6 @@ package app
 
 import (
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
-	"github.com/lemonlzy/vegetableBlog/internal/server/mysql"
 	"gorm.io/gorm"
 )
 
@@ -25,7 +24,7 @@ func CreateArticle(a *Article) error {
 	// 生成文章ID
 	a.ArticleID = snowflake.GenID()
 	// 数据库创建
-	if err := mysql.DB.Debug().Create(a).Error; err != nil {
+	if err := DB.Debug().Create(a).Error; err != nil {
 		// 日志记录
 		return err
 	}
@@ -35,7 +34,7 @@ func CreateArticle(a *Article) error {
 // GetArticleDetail 根据文章id获取文章详情
 func GetArticleDetail(articleID int64) (*Article, error) {
 	a := new(Article)
-	if err := mysql.DB.Debug().Where("article_id = ?", articleID).First(&a).Error; err != nil {
+	if err := DB.Debug().Where("article_id = ?", articleID).First(&a).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return nil, err
 		}
@@ -46,7 +45,7 @@ func GetArticleDetail(articleID int64) (*Article, error) {
 // GetArticleList 获取所有文章
 func GetArticleList(page, size int64) ([]*Article, error) {
 	var articles []*Article
-	if err := mysql.DB.Debug().Where("status != ?", 2).Offset(int((page - 1) * size)).Order("updated_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
+	if err := DB.Debug().Where("status != ?", 2).Offset(int((page - 1) * size)).Order("updated_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, err
 		}
@@ -56,7 +55,7 @@ func GetArticleList(page, size int64) ([]*Article, error) {
 
 // UpdateArticleByID 更新文章信息
 func UpdateArticleByID(articleID int64, a *Article) error {
-	if err := mysql.DB.Debug().Where("article_id = ?", articleID).Updates(a).Error; err != nil {
+	if err := DB.Debug().Where("article_id = ?", articleID).Updates(a).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return err
 		}
