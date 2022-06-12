@@ -12,44 +12,55 @@ import (
 
 const (
 	FileDir = "test/"
-	CosURL  = "https://blog-1300597227.cos.ap-guangzhou.myqcloud.com/"
 )
 
-var ossClient = genClient()
+var (
+	cosURL    string
+	secretID  string
+	secretKey string
+	ossClient *cos.Client
+)
+
+func init() {
+	cosURL = getCosURL()
+	secretID = getCosID()
+	secretKey = getCosKey()
+	ossClient = genClient()
+}
 
 func getCosID() string {
-	SecretID, ok := os.LookupEnv("COS_SecretID")
+	id, ok := os.LookupEnv("COS_SecretID")
 	if !ok {
 		fmt.Println("COS_SecretID not set")
 	}
-	return SecretID
+	return id
 }
 
 func getCosKey() string {
-	SecretKey, ok := os.LookupEnv("COS_SecretKey")
+	key, ok := os.LookupEnv("COS_SecretKey")
 	if !ok {
 		fmt.Println("COS_SecretKey not set")
 	}
-	return SecretKey
+	return key
 }
 
 func getCosURL() string {
-	CosUrl, ok := os.LookupEnv("COS_URL")
+	link, ok := os.LookupEnv("COS_URL")
 	if !ok {
 		fmt.Println("COS_URL not set")
 	}
-	return CosUrl
+	return link
 }
 
 // genClient 初始化COS对象
 func genClient() *cos.Client {
 	// https://cloud.tencent.com/document/product/436/31215
-	u, _ := url.Parse(CosURL)
+	u, _ := url.Parse(cosURL)
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
-			SecretID:  getCosID(),
-			SecretKey: getCosKey(),
+			SecretID:  secretID,
+			SecretKey: secretKey,
 		},
 	})
 	return client
@@ -63,5 +74,5 @@ func Put(fileHeader *multipart.FileHeader) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return CosURL + filename
+	return cosURL + filename
 }
