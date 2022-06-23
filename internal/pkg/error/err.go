@@ -1,31 +1,43 @@
-package error
+package err
 
 import "fmt"
 
-type Error struct {
-	code int
-	msg  string
-	data []string
+type ErrorCode int16
+
+type ErrorInfo struct {
+	Source string
+	Code   ErrorCode
+	Msg    string
 }
 
-var codes = map[int]string{}
-
-func NewError(code int, msg string) *Error {
-	if _, ok := codes[code]; ok {
-		panic(fmt.Sprintf("错误码 %d 已经存在，请更换", code))
-	}
-	codes[code] = msg
-	return &Error{code: code, msg: msg}
+func NewError(Source string, code ErrorCode, msg string) *ErrorInfo {
+	return &ErrorInfo{Source: Source, Code: code, Msg: msg}
 }
 
-func (e *Error) Error() string {
-	return fmt.Sprintf("错误码: %d, 错误信息: %s", e.code, e.msg)
+func (ei *ErrorInfo) Error() string {
+	return fmt.Sprintf("错误来源: %s, 错误码: %d, 错误信息: %s", ei.Source, ei.Code, ei.Msg)
 }
 
-func (e *Error) Code() int {
-	return e.code
+func (ei *ErrorInfo) ErrSource() string {
+	return ei.Source
 }
 
-func (e *Error) Msg() string {
-	return e.msg
+func (ei *ErrorInfo) ErrCode() ErrorCode {
+	return ei.Code
+}
+
+func (ei *ErrorInfo) ErrMsg() string {
+	return ei.Msg
+}
+
+func NewClientError(code ErrorCode, msg string) *ErrorInfo {
+	return NewError(SourceClient, code, msg)
+}
+
+func NewServerError(code ErrorCode, msg string) *ErrorInfo {
+	return NewError(SourceServer, code, msg)
+}
+
+func NewUnknownError(code ErrorCode, msg string) *ErrorInfo {
+	return NewError(SourceUnknown, code, msg)
 }
