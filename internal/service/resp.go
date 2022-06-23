@@ -7,12 +7,12 @@ import (
 )
 
 type ResponseData struct {
-	Code ResCode     `json:"code"`
-	Msg  interface{} `json:"msg"`
-	Data interface{} `json:"data"`
+	Code err.ErrorCode `json:"code"`
+	Msg  interface{}   `json:"msg"`
+	Data interface{}   `json:"data"`
 }
 
-func ResponseError(c *gin.Context, code ResCode) {
+func ResponseError(c *gin.Context, code err.ErrorCode) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  code.GetMsg(),
@@ -20,7 +20,7 @@ func ResponseError(c *gin.Context, code ResCode) {
 	})
 }
 
-func ResponseErrorWithMsg(c *gin.Context, code ResCode, msg interface{}) {
+func ResponseErrorWithMsg(c *gin.Context, code err.ErrorCode, msg interface{}) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  msg,
@@ -31,7 +31,7 @@ func ResponseErrorWithMsg(c *gin.Context, code ResCode, msg interface{}) {
 func ResponseSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: err.CodeSuccess,
-		Msg:  CodeSuccess.GetMsg(),
+		Msg:  err.CodeSuccess.GetMsg(),
 		Data: data,
 	})
 }
