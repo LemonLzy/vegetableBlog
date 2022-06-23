@@ -24,12 +24,22 @@ func Register(engine *gin.Engine) {
 		})
 	})
 
-	v1 := engine.Group("/api/v1")
+	api := engine.Group("/api/")
 	{
-		v1.GET("/article/:id", handler.ArticleDetailHandler)
-		v1.GET("/articles", handler.ArticleListHandler)
-		v1.POST("/article", handler.CreateArticleHandler)
-		v1.PUT("/article/:id", handler.UpdateArticleHandler)
+		api.POST("/sign_up", handler.UserSignUpHandler)
+		api.POST("/sign_in", handler.UserSignInHandler)
+	}
+
+	{
+		api.GET("/article/:id", handler.ArticleDetailHandler)
+		api.GET("/articles", handler.ArticleListHandler)
+		api.POST("/article", handler.ArticleCreateHandler)
+		api.PUT("/article/:id", handler.ArticleUpdateHandler)
+	}
+
+	{
+		api.POST("/user", handler.UserCreateHandler)
+		api.PUT("/user/:id", handler.UserUpdateHandler)
 	}
 
 	oss := engine.Group("/oss")

@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func CreateArticleHandler(c *gin.Context) {
+func ArticleCreateHandler(c *gin.Context) {
 	a := new(app.Article)
 
 	if err := c.ShouldBindJSON(a); err != nil {
@@ -31,7 +31,7 @@ func CreateArticleHandler(c *gin.Context) {
 	})
 }
 
-func UpdateArticleHandler(c *gin.Context) {
+func ArticleUpdateHandler(c *gin.Context) {
 	// 获取文章id
 	idStr := c.Param("id")
 	articleID, err := strconv.ParseInt(idStr, 10, 64)
