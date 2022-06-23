@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/api"
 	"github.com/lemonlzy/vegetableBlog/internal/app"
+	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"github.com/lemonlzy/vegetableBlog/internal/service"
 	"net/http"
 	"strconv"
 )
@@ -71,12 +73,10 @@ func UserUpdateHandler(c *gin.Context) {
 }
 
 func UserSignUpHandler(c *gin.Context) {
-	p := new(api.ParamSignUp)
-	err := c.ShouldBindJSON(p)
+	pu := new(api.ParamSignUp)
+	err := c.ShouldBindJSON(pu)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "缺少必填参数",
-		})
+		service.ResponseError(c, errCode.CodeClientReqInvalid)
 		return
 	}
 }

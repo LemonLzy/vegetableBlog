@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lemonlzy/vegetableBlog/cmd/router"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
+	"github.com/lemonlzy/vegetableBlog/internal/router"
 	"github.com/lemonlzy/vegetableBlog/internal/server/conf"
 	"github.com/lemonlzy/vegetableBlog/internal/server/mysql"
 )

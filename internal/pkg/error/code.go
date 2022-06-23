@@ -1,4 +1,4 @@
-package err
+package errCode
 
 const CodeSuccess ErrorCode = 0 // 请求成功
 

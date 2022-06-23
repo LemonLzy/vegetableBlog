@@ -2,17 +2,17 @@ package service
 
 import (
 	"github.com/gin-gonic/gin"
-	err "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
 	"net/http"
 )
 
 type ResponseData struct {
-	Code err.ErrorCode `json:"code"`
-	Msg  interface{}   `json:"msg"`
-	Data interface{}   `json:"data"`
+	Code errCode.ErrorCode `json:"code"`
+	Msg  interface{}       `json:"msg"`
+	Data interface{}       `json:"data"`
 }
 
-func ResponseError(c *gin.Context, code err.ErrorCode) {
+func ResponseError(c *gin.Context, code errCode.ErrorCode) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  code.GetMsg(),
@@ -20,7 +20,7 @@ func ResponseError(c *gin.Context, code err.ErrorCode) {
 	})
 }
 
-func ResponseErrorWithMsg(c *gin.Context, code err.ErrorCode, msg interface{}) {
+func ResponseErrorWithMsg(c *gin.Context, code errCode.ErrorCode, msg interface{}) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  msg,
@@ -30,8 +30,8 @@ func ResponseErrorWithMsg(c *gin.Context, code err.ErrorCode, msg interface{}) {
 
 func ResponseSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &ResponseData{
-		Code: err.CodeSuccess,
-		Msg:  err.CodeSuccess.GetMsg(),
+		Code: errCode.CodeSuccess,
+		Msg:  errCode.CodeSuccess.GetMsg(),
 		Data: data,
 	})
 }

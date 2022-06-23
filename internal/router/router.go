@@ -3,7 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/lemonlzy/vegetableBlog/cmd/router/handler"
+	handler2 "github.com/lemonlzy/vegetableBlog/internal/router/handler"
 	"net/http"
 	"os"
 )
@@ -26,25 +26,25 @@ func Register(engine *gin.Engine) {
 
 	api := engine.Group("/api/")
 	{
-		api.POST("/sign_up", handler.UserSignUpHandler)
-		api.POST("/sign_in", handler.UserSignInHandler)
+		api.POST("/sign_up", handler2.UserSignUpHandler)
+		api.POST("/sign_in", handler2.UserSignInHandler)
 	}
 
 	{
-		api.GET("/article/:id", handler.ArticleDetailHandler)
-		api.GET("/articles", handler.ArticleListHandler)
-		api.POST("/article", handler.ArticleCreateHandler)
-		api.PUT("/article/:id", handler.ArticleUpdateHandler)
+		api.GET("/article/:id", handler2.ArticleDetailHandler)
+		api.GET("/articles", handler2.ArticleListHandler)
+		api.POST("/article", handler2.ArticleCreateHandler)
+		api.PUT("/article/:id", handler2.ArticleUpdateHandler)
 	}
 
 	{
-		api.POST("/user", handler.UserCreateHandler)
-		api.PUT("/user/:id", handler.UserUpdateHandler)
+		api.POST("/user", handler2.UserCreateHandler)
+		api.PUT("/user/:id", handler2.UserUpdateHandler)
 	}
 
 	oss := engine.Group("/oss")
 	{
-		oss.POST("/upload", handler.OssPostHandler)
+		oss.POST("/upload", handler2.OssPostHandler)
 	}
 }
 
