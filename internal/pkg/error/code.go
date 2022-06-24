@@ -15,6 +15,7 @@ const (
 	CodeUserInvalidName ErrorCode = -2000 - iota // 用户名格式不符合要求
 	CodeUserInvalidPass                          // 密码格式不符合要求
 	CodeUserORPassword                           // 用户名或密码错误
+	CodeUserExist                                // 用户名已存在
 )
 
 // Article错误码
@@ -42,6 +43,7 @@ var codeMsgMap = map[ErrorCode]string{
 	CodeUserInvalidName: "用户名格式不符合要求",
 	CodeUserInvalidPass: "密码格式不符合要求",
 	CodeUserORPassword:  "用户名或密码错误",
+	CodeUserExist:       "用户名已存在",
 
 	CodeArticleCreate:  "新建Article错误",
 	CodeArticleUpdate:  "更新Article错误",

@@ -79,6 +79,17 @@ func UserSignUpHandler(c *gin.Context) {
 		service.ResponseError(c, errCode.CodeClientReqInvalid)
 		return
 	}
+	err = service.SignUp(pu)
+	if err != nil {
+		if _, ok := err.(*errCode.ErrorInfo); ok {
+			service.ResponseError(c, errCode.CodeUserExist)
+			return
+		}
+		service.ResponseError(c, errCode.CodeServerUnknown)
+		return
+	}
+
+	service.ResponseSuccess(c, nil)
 }
 
 func UserSignInHandler(c *gin.Context) {

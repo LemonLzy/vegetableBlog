@@ -1,6 +1,9 @@
 package app
 
-import "gorm.io/gorm"
+import (
+	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"gorm.io/gorm"
+)
 
 type User struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
@@ -8,6 +11,7 @@ type User struct {
 	Password  string `json:"password,omitempty" gorm:"type:varchar(64);comment:登录密码" binding:"required"`
 	Nickname  string `json:"nickname,omitempty" gorm:"type:varchar(30);comment:用户昵称"`
 	IsAdmin   bool   `json:"is_admin,omitempty" gorm:"default:0;comment:是否是管理员：0-否 1-是;"`
+	UserID    int64  `json:"user_id,omitempty" gorm:"comment:用户唯一ID"`
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 	DeletedAT int64  `json:"deleted_at,omitempty" gorm:"autoDeleteTime"`
@@ -25,13 +29,13 @@ func CreateUser(u *User) error {
 // GetUserByName 根据用户名查找用户
 func GetUserByName(name string) (bool, error) {
 	var u User
-	err := DB.Debug().Select("id").Where("name = ? AND delete_at = ?", name, 0).First(&u).Error
+	err := DB.Debug().Select("id").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return false, err
 	}
 
 	if u.ID > 0 {
-		return true, nil
+		return true, errCode.NewClientError(errCode.CodeUserExist, "用户名已存在")
 	}
 
 	return false, nil
