@@ -16,7 +16,7 @@ const (
 	CodeUserInvalidPass                          // 密码格式不符合要求
 	CodeUserORPassword                           // 用户名或密码错误
 	CodeUserExist                                // 用户名已存在
-	CodeUserPwNotEqual
+	CodeUserPwNotEqual                           // 用户两次输入的密码不相等
 )
 
 // Article错误码
