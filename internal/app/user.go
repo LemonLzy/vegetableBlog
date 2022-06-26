@@ -35,7 +35,7 @@ func GetUserByName(name string) (bool, error) {
 	}
 
 	if u.ID > 0 {
-		return true, errCode.NewClientError(errCode.CodeUserExist, "用户名已存在")
+		return true, errCode.NewClientError(errCode.CodeUserExist)
 	}
 
 	return false, nil

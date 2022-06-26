@@ -36,7 +36,7 @@ const (
 )
 
 var codeMsgMap = map[ErrorCode]string{
-	CodeSuccess:            "CodeSuccess",
+	CodeSuccess:            "成功",
 	CodeServerUnknown:      "未知错误",
 	CodeServerInvalidToken: "无效的token",
 	CodeClientReqInvalid:   "请求参数错误",

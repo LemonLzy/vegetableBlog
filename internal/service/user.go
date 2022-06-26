@@ -15,7 +15,7 @@ func SignUp(psu *api.ParamSignUp) error {
 	}
 
 	if psu.Password != psu.RePassword {
-		return errCode.NewClientError(errCode.CodeUserPwNotEqual, "两次输入的密码不相等")
+		return errCode.NewClientError(errCode.CodeUserPwNotEqual)
 	}
 	// 生成用户唯一标识ID
 	userID := snowflake.GenID()

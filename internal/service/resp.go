@@ -12,7 +12,14 @@ type ResponseData struct {
 	Data interface{}       `json:"data"`
 }
 
-func ResponseError(c *gin.Context, code errCode.ErrorCode) {
+func ResponseError(c *gin.Context, err error) {
+	var code errCode.ErrorCode
+
+	if _, ok := err.(*errCode.ErrorInfo); ok {
+		errType := errCode.Err2ErrorInfo(err)
+		code = errType.Code
+	}
+
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  code.GetMsg(),

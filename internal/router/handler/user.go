@@ -76,16 +76,12 @@ func UserSignUpHandler(c *gin.Context) {
 	pu := new(api.ParamSignUp)
 	err := c.ShouldBindJSON(pu)
 	if err != nil {
-		service.ResponseError(c, errCode.CodeClientReqInvalid)
+		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
 		return
 	}
 	err = service.SignUp(pu)
 	if err != nil {
-		if _, ok := err.(*errCode.ErrorInfo); ok {
-			service.ResponseError(c, errCode.CodeUserExist)
-			return
-		}
-		service.ResponseError(c, errCode.CodeServerUnknown)
+		service.ResponseError(c, err)
 		return
 	}
 

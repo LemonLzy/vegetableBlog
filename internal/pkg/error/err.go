@@ -1,6 +1,9 @@
 package errCode
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type ErrorCode int16
 
@@ -30,7 +33,11 @@ func (ei *ErrorInfo) ErrMsg() string {
 	return ei.Msg
 }
 
-func NewClientError(code ErrorCode, msg string) *ErrorInfo {
+func NewClientError(code ErrorCode) *ErrorInfo {
+	return NewError(SourceClient, code, code.GetMsg())
+}
+
+func NewClientErrorWithMsg(code ErrorCode, msg string) *ErrorInfo {
 	return NewError(SourceClient, code, msg)
 }
 
@@ -40,4 +47,12 @@ func NewServerError(code ErrorCode, msg string) *ErrorInfo {
 
 func NewUnknownError(code ErrorCode, msg string) *ErrorInfo {
 	return NewError(SourceUnknown, code, msg)
+}
+
+func Err2ErrorInfo(err error) *ErrorInfo {
+	var errType *ErrorInfo
+	if errors.As(err, &errType) {
+		return errType
+	}
+	return nil
 }
