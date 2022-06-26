@@ -33,3 +33,18 @@ func SignUp(psu *api.ParamSignUp) error {
 	}
 	return nil
 }
+
+func SignIn(psi *api.ParamSignIn) error {
+	// 根据用户名查询加密密码
+	password, err := app.GetUserPwByName(psi.Username)
+	if err != nil {
+		return err
+	}
+	// 比较数据库存储加密的密码和用户输入的密码
+	compare := utils.BcryptCompare(password, psi.Password)
+	if !compare {
+		return errCode.NewClientError(errCode.CodeUserORPasswordErr)
+	}
+	// 生成jwt Token
+	return nil
+}

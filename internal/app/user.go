@@ -7,7 +7,7 @@ import (
 
 type User struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
-	Username  string `json:"username,omitempty" gorm:"type:varchar(30);comment:用户登录名" binding:"required"`
+	Username  string `json:"username,omitempty" gorm:"type:varchar(30);uniqueIndex;comment:用户登录名" binding:"required"`
 	Password  string `json:"password,omitempty" gorm:"type:varchar(64);comment:登录密码" binding:"required"`
 	Nickname  string `json:"nickname,omitempty" gorm:"type:varchar(30);comment:用户昵称"`
 	IsAdmin   bool   `json:"is_admin,omitempty" gorm:"default:0;comment:是否是管理员：0-否 1-是;"`
@@ -39,6 +39,20 @@ func GetUserByName(name string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func GetUserPwByName(name string) (string, error) {
+	var u User
+	err := DB.Debug().Select("password").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return "", err
+	}
+
+	if u.Password != "" {
+		return u.Password, nil
+	}
+
+	return "", errCode.NewClientError(errCode.CodeUserExist)
 }
 
 // UpdateUserByID 更新用户信息

@@ -14,15 +14,20 @@ type ResponseData struct {
 
 func ResponseError(c *gin.Context, err error) {
 	var code errCode.ErrorCode
+	var msg string
 
 	if _, ok := err.(*errCode.ErrorInfo); ok {
 		errType := errCode.Err2ErrorInfo(err)
 		code = errType.Code
+		msg = code.GetMsg()
+	} else {
+		code = errCode.CodeServerUnknown
+		msg = err.Error()
 	}
 
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
-		Msg:  code.GetMsg(),
+		Msg:  msg,
 		Data: nil,
 	})
 }

@@ -73,13 +73,14 @@ func UserUpdateHandler(c *gin.Context) {
 }
 
 func UserSignUpHandler(c *gin.Context) {
-	pu := new(api.ParamSignUp)
-	err := c.ShouldBindJSON(pu)
+	psu := new(api.ParamSignUp)
+	err := c.ShouldBindJSON(psu)
 	if err != nil {
 		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
 		return
 	}
-	err = service.SignUp(pu)
+
+	err = service.SignUp(psu)
 	if err != nil {
 		service.ResponseError(c, err)
 		return
@@ -89,5 +90,18 @@ func UserSignUpHandler(c *gin.Context) {
 }
 
 func UserSignInHandler(c *gin.Context) {
+	psi := new(api.ParamSignIn)
+	err := c.ShouldBindJSON(psi)
+	if err != nil {
+		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		return
+	}
 
+	err = service.SignIn(psi)
+	if err != nil {
+		service.ResponseError(c, err)
+		return
+	}
+
+	service.ResponseSuccess(c, nil)
 }
