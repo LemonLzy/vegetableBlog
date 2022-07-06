@@ -105,3 +105,24 @@ func UserSignInHandler(c *gin.Context) {
 
 	service.ResponseSuccess(c, nil)
 }
+
+func UserModifyHandler(c *gin.Context) {
+
+}
+
+func UserModifyPwHandler(c *gin.Context) {
+	pmp := new(api.ParamModifyPw)
+	err := c.ShouldBindJSON(pmp)
+	if err != nil {
+		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		return
+	}
+
+	err = service.ModifyPw(pmp)
+	if err != nil {
+		service.ResponseError(c, err)
+		return
+	}
+
+	service.ResponseSuccess(c, nil)
+}

@@ -16,6 +16,7 @@ const (
 	CodeUserInvalidPass                            // 密码格式不符合要求
 	CodeUserORPasswordErr                          // 用户名或密码错误
 	CodeUserExist                                  // 用户名已存在
+	CodeUserNotExist                               // 用户不存在
 	CodeUserPwNotEqual                             // 用户两次输入的密码不相等
 )
 
@@ -45,6 +46,7 @@ var codeMsgMap = map[ErrorCode]string{
 	CodeUserInvalidPass:   "密码格式不符合要求",
 	CodeUserORPasswordErr: "用户名或密码错误",
 	CodeUserExist:         "用户名已存在",
+	CodeUserNotExist:      "用户不存在",
 	CodeUserPwNotEqual:    "两次输入的密码不相等",
 
 	CodeArticleCreate:  "新建Article错误",

@@ -41,8 +41,8 @@ func NewClientErrorWithMsg(code ErrorCode, msg string) *ErrorInfo {
 	return NewError(SourceClient, code, msg)
 }
 
-func NewServerError(code ErrorCode, msg string) *ErrorInfo {
-	return NewError(SourceServer, code, msg)
+func NewServerError(code ErrorCode) *ErrorInfo {
+	return NewError(SourceServer, code, code.GetMsg())
 }
 
 func NewUnknownError(code ErrorCode, msg string) *ErrorInfo {

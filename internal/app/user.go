@@ -26,6 +26,12 @@ func CreateUser(u *User) error {
 	return nil
 }
 
+// UpdateUserByID 更新用户信息
+func UpdateUserByID(userID int64, u *User) error {
+	err := DB.Debug().Where("user_id = ?", userID).Updates(u).Error
+	return err
+}
+
 // GetUserByName 根据用户名查找用户
 func GetUserByName(name string) (bool, error) {
 	var u User
@@ -41,6 +47,22 @@ func GetUserByName(name string) (bool, error) {
 	return false, nil
 }
 
+// GetUserByID 根据用户ID查找用户
+func GetUserByID(userID int64) (bool, error) {
+	var u User
+	err := DB.Debug().Select("id").Where("user_id = ?  AND deleted_at = ?", userID, 0).First(&u).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return false, err
+	}
+
+	if u.ID > 0 {
+		return true, nil
+	}
+
+	return false, errCode.NewClientError(errCode.CodeUserNotExist)
+}
+
+// GetUserPwByName 根据用户名查找用户密码
 func GetUserPwByName(name string) (string, error) {
 	var u User
 	err := DB.Debug().Select("password").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
@@ -55,12 +77,17 @@ func GetUserPwByName(name string) (string, error) {
 	return "", errCode.NewClientError(errCode.CodeUserExist)
 }
 
-// UpdateUserByID 更新用户信息
-func UpdateUserByID(userID int64, u *User) error {
-	if err := DB.Debug().Where("id = ?", userID).Updates(u).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			return err
-		}
+// GetUserPwByID 根据用户ID查找用户密码
+func GetUserPwByID(userID int64) (string, error) {
+	var u User
+	err := DB.Debug().Select("password").Where("user_id = ? AND deleted_at = ?", userID, 0).First(&u).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return "", err
 	}
-	return nil
+
+	if u.Password != "" {
+		return u.Password, nil
+	}
+
+	return "", errCode.NewClientError(errCode.CodeUserExist)
 }
