@@ -5,6 +5,7 @@ import (
 	"github.com/lemonlzy/vegetableBlog/api"
 	"github.com/lemonlzy/vegetableBlog/internal/app"
 	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/resp"
 	"github.com/lemonlzy/vegetableBlog/internal/service"
 	"net/http"
 	"strconv"
@@ -21,7 +22,7 @@ func UserCreateHandler(c *gin.Context) {
 	}
 
 	// 判断用户是否存在
-	if ok, err := app.GetUserByName(u.Username); ok {
+	if ok, err := app.CheckUserByName(u.Username); ok {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "用户名重复" + err.Error(),
 		})
@@ -76,34 +77,34 @@ func UserSignUpHandler(c *gin.Context) {
 	psu := new(api.ParamSignUp)
 	err := c.ShouldBindJSON(psu)
 	if err != nil {
-		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
 		return
 	}
 
 	err = service.SignUp(psu)
 	if err != nil {
-		service.ResponseError(c, err)
+		resp.ResponseError(c, err)
 		return
 	}
 
-	service.ResponseSuccess(c, nil)
+	resp.ResponseSuccess(c, nil)
 }
 
 func UserSignInHandler(c *gin.Context) {
 	psi := new(api.ParamSignIn)
 	err := c.ShouldBindJSON(psi)
 	if err != nil {
-		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
 		return
 	}
 
-	err = service.SignIn(psi)
+	user, err := service.SignIn(psi)
 	if err != nil {
-		service.ResponseError(c, err)
+		resp.ResponseError(c, err)
 		return
 	}
 
-	service.ResponseSuccess(c, nil)
+	resp.ResponseSuccess(c, user)
 }
 
 func UserModifyHandler(c *gin.Context) {
@@ -114,15 +115,15 @@ func UserModifyPwHandler(c *gin.Context) {
 	pmp := new(api.ParamModifyPw)
 	err := c.ShouldBindJSON(pmp)
 	if err != nil {
-		service.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
 		return
 	}
 
 	err = service.ModifyPw(pmp)
 	if err != nil {
-		service.ResponseError(c, err)
+		resp.ResponseError(c, err)
 		return
 	}
 
-	service.ResponseSuccess(c, nil)
+	resp.ResponseSuccess(c, nil)
 }

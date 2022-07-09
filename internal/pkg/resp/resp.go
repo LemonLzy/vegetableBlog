@@ -1,14 +1,14 @@
-package service
+package resp
 
 import (
 	"github.com/gin-gonic/gin"
-	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/error"
 	"net/http"
 )
 
 type ResponseData struct {
 	Code errCode.ErrorCode `json:"code"`
-	Msg  interface{}       `json:"msg"`
+	Msg  string            `json:"msg"`
 	Data interface{}       `json:"data"`
 }
 
@@ -32,7 +32,7 @@ func ResponseError(c *gin.Context, err error) {
 	})
 }
 
-func ResponseErrorWithMsg(c *gin.Context, code errCode.ErrorCode, msg interface{}) {
+func ResponseErrorWithMsg(c *gin.Context, code errCode.ErrorCode, msg string) {
 	c.JSON(http.StatusOK, &ResponseData{
 		Code: code,
 		Msg:  msg,

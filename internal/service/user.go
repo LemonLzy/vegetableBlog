@@ -3,7 +3,8 @@ package service
 import (
 	"github.com/lemonlzy/vegetableBlog/api"
 	"github.com/lemonlzy/vegetableBlog/internal/app"
-	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/error"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/middleware"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/utils"
 )
@@ -15,7 +16,7 @@ func SignUp(psu *api.ParamSignUp) error {
 	}
 
 	// 判断用户名是否重复
-	if ok, err := app.GetUserByName(psu.Username); ok || err != nil {
+	if ok, err := app.CheckUserByName(psu.Username); ok || err != nil {
 		return err
 	}
 
@@ -37,19 +38,34 @@ func SignUp(psu *api.ParamSignUp) error {
 }
 
 // SignIn 登录
-func SignIn(psi *api.ParamSignIn) error {
+func SignIn(psi *api.ParamSignIn) (*app.User, error) {
+	user := new(app.User)
+
 	// 根据用户名查询加密密码
-	pwBySQL, err := app.GetUserPwByName(psi.Username)
+	userBySQL, err := app.GetUserByName(psi.Username)
 	if err != nil {
-		return err
+		return user, err
 	}
+
 	// 比较数据库存储加密的密码和用户输入的密码
-	equal := utils.BcryptCompare(pwBySQL, psi.Password)
+	equal := utils.BcryptCompare(userBySQL.Password, psi.Password)
 	if !equal {
-		return errCode.NewClientError(errCode.CodeUserORPasswordErr)
+		return user, errCode.NewClientError(errCode.CodeUserORPasswordErr)
 	}
-	// 生成jwt Token
-	return nil
+
+	// 生成JWT token
+	atoken, rToken, err := middleware.GenToken(userBySQL.UserID, psi.Username)
+	if err != nil {
+		return user, err
+	}
+
+	// 组装响应的user结构体字段
+	user.UserID = userBySQL.UserID
+	user.Nickname = userBySQL.Nickname
+	user.IsAdmin = userBySQL.IsAdmin
+	user.AToken = atoken
+	user.RToken = rToken
+	return user, nil
 }
 
 // ModifyPw 更改密码
@@ -59,7 +75,7 @@ func ModifyPw(pmp *api.ParamModifyPw) error {
 	}
 
 	// 判断用户是否存在
-	if ok, err := app.GetUserByID(pmp.UserID); !ok || err != nil {
+	if ok, err := app.CheckUserByID(pmp.UserID); !ok || err != nil {
 		return err
 	}
 

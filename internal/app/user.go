@@ -7,10 +7,12 @@ import (
 
 type User struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
+	IsAdmin   int8   `json:"is_admin,omitempty" gorm:"default:0;comment:是否是管理员：0-否 1-是;"`
 	Username  string `json:"username,omitempty" gorm:"type:varchar(30);uniqueIndex;comment:用户登录名" binding:"required"`
 	Password  string `json:"password,omitempty" gorm:"type:varchar(64);comment:登录密码" binding:"required"`
 	Nickname  string `json:"nickname,omitempty" gorm:"type:varchar(30);comment:用户昵称"`
-	IsAdmin   bool   `json:"is_admin,omitempty" gorm:"default:0;comment:是否是管理员：0-否 1-是;"`
+	AToken    string `json:"a_token" gorm:"varchar(60);comment:用户凭据"`
+	RToken    string `json:"r_token" gorm:"varchar(60);comment:用户凭据"`
 	UserID    int64  `json:"user_id,omitempty" gorm:"comment:用户唯一ID"`
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
@@ -32,8 +34,8 @@ func UpdateUserByID(userID int64, u *User) error {
 	return err
 }
 
-// GetUserByName 根据用户名查找用户
-func GetUserByName(name string) (bool, error) {
+// CheckUserByName 根据用户名检查用户是否存在
+func CheckUserByName(name string) (bool, error) {
 	var u User
 	err := DB.Debug().Select("id").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -47,8 +49,8 @@ func GetUserByName(name string) (bool, error) {
 	return false, nil
 }
 
-// GetUserByID 根据用户ID查找用户
-func GetUserByID(userID int64) (bool, error) {
+// CheckUserByID 根据用户ID检查用户是否存在
+func CheckUserByID(userID int64) (bool, error) {
 	var u User
 	err := DB.Debug().Select("id").Where("user_id = ?  AND deleted_at = ?", userID, 0).First(&u).Error
 	if err != nil && err != gorm.ErrRecordNotFound {
@@ -60,6 +62,21 @@ func GetUserByID(userID int64) (bool, error) {
 	}
 
 	return false, errCode.NewClientError(errCode.CodeUserNotExist)
+}
+
+// GetUserByName 根据用户名查找用户
+func GetUserByName(name string) (*User, error) {
+	var u *User
+	err := DB.Debug().Select("password", "is_admin", "nickname", "user_id").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return nil, err
+	}
+
+	if u.UserID > 0 {
+		return u, nil
+	}
+
+	return nil, errCode.NewClientError(errCode.CodeUserNotExist)
 }
 
 // GetUserPwByName 根据用户名查找用户密码
@@ -74,7 +91,7 @@ func GetUserPwByName(name string) (string, error) {
 		return u.Password, nil
 	}
 
-	return "", errCode.NewClientError(errCode.CodeUserExist)
+	return "", errCode.NewClientError(errCode.CodeUserNotExist)
 }
 
 // GetUserPwByID 根据用户ID查找用户密码
@@ -89,5 +106,20 @@ func GetUserPwByID(userID int64) (string, error) {
 		return u.Password, nil
 	}
 
-	return "", errCode.NewClientError(errCode.CodeUserExist)
+	return "", errCode.NewClientError(errCode.CodeUserNotExist)
+}
+
+// GetUserIDByName 根据用户名查找用户ID
+func GetUserIDByName(name string) (int64, error) {
+	var u User
+	err := DB.Debug().Select("user_id").Where("username = ? AND deleted_at = ?", name, 0).First(&u).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		return 0, err
+	}
+
+	if u.UserID > 0 {
+		return u.UserID, nil
+	}
+
+	return 0, errCode.NewClientError(errCode.CodeUserNotExist)
 }
