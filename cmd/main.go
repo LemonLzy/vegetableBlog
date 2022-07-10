@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
 	"github.com/lemonlzy/vegetableBlog/internal/router"
@@ -28,7 +27,6 @@ func main() {
 	}
 
 	engine := gin.New()
-	engine.Use(cors.Default())
 	router.Register(engine)
 
 	err = engine.Run(":" + conf.Conf.Port)

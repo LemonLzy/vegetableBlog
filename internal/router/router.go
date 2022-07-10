@@ -2,6 +2,7 @@ package router
 
 import (
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/internal/router/handler"
 	"net/http"
@@ -24,6 +25,7 @@ func Register(engine *gin.Engine) {
 		})
 	})
 
+	engine.Use(getCorsConf())
 	api := engine.Group("/api/")
 	{
 		api.POST("/sign_up", handler.UserSignUpHandler)
@@ -56,4 +58,15 @@ func getStaticPath() (string, string) {
 	staticPath := projectPath + "/web/static"
 	fmt.Println(projectPath, indexPath, staticPath)
 	return indexPath, staticPath
+}
+
+func getCorsConf() gin.HandlerFunc {
+	// 注意JWT认证时，放行请求头Authorization，避免跨域问题
+	return cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"*"},
+		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin", "Content-Language", "Content-Type"},
+		AllowCredentials: false,
+	})
 }
