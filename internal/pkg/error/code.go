@@ -36,7 +36,7 @@ const (
 	TagInvalid                          // Tag不存在
 )
 
-var codeMsgMap = map[ErrorCode]string{
+var code2msg = map[ErrorCode]string{
 	Success: "成功",
 
 	ServerUnknown:      "未知错误",
@@ -68,9 +68,9 @@ const (
 )
 
 func (ei ErrorCode) GetMsg() string {
-	msg, ok := codeMsgMap[ei]
+	msg, ok := code2msg[ei]
 	if !ok {
-		msg = codeMsgMap[ServerUnknown]
+		msg = code2msg[ServerUnknown]
 	}
 	return msg
 }

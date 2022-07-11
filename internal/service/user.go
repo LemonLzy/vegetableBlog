@@ -54,7 +54,7 @@ func SignIn(psi *api.ParamSignIn) (*app.User, error) {
 	}
 
 	// 生成JWT token
-	atoken, rToken, err := middleware.GenToken(userBySQL.UserID, psi.Username)
+	aToken, rToken, err := middleware.GenToken(userBySQL.UserID, psi.Username)
 	if err != nil {
 		return user, err
 	}
@@ -63,7 +63,7 @@ func SignIn(psi *api.ParamSignIn) (*app.User, error) {
 	user.UserID = userBySQL.UserID
 	user.Nickname = userBySQL.Nickname
 	user.IsAdmin = userBySQL.IsAdmin
-	user.AToken = atoken
+	user.AToken = aToken
 	user.RToken = rToken
 	return user, nil
 }
