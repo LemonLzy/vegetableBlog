@@ -25,7 +25,7 @@ func Register(engine *gin.Engine) {
 		})
 	})
 
-	engine.Use(getCorsConf())
+	engine.Use(getCorsFunc())
 	api := engine.Group("/api/")
 	{
 		api.POST("/sign_up", handler.UserSignUpHandler)
@@ -60,7 +60,7 @@ func getStaticPath() (string, string) {
 	return indexPath, staticPath
 }
 
-func getCorsConf() gin.HandlerFunc {
+func getCorsFunc() gin.HandlerFunc {
 	// 注意JWT认证时，放行请求头Authorization，避免跨域问题
 	return cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},

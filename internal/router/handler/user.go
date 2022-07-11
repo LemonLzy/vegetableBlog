@@ -77,7 +77,7 @@ func UserSignUpHandler(c *gin.Context) {
 	psu := new(api.ParamSignUp)
 	err := c.ShouldBindJSON(psu)
 	if err != nil {
-		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.ClientReqInvalid))
 		return
 	}
 
@@ -94,7 +94,7 @@ func UserSignInHandler(c *gin.Context) {
 	psi := new(api.ParamSignIn)
 	err := c.ShouldBindJSON(psi)
 	if err != nil {
-		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.ClientReqInvalid))
 		return
 	}
 
@@ -115,7 +115,7 @@ func UserModifyPwHandler(c *gin.Context) {
 	pmp := new(api.ParamModifyPw)
 	err := c.ShouldBindJSON(pmp)
 	if err != nil {
-		resp.ResponseError(c, errCode.NewClientError(errCode.CodeClientReqInvalid))
+		resp.ResponseError(c, errCode.NewClientError(errCode.ClientReqInvalid))
 		return
 	}
 

@@ -1,63 +1,64 @@
 package errCode
 
-const CodeSuccess ErrorCode = 0 // 请求成功
+const Success ErrorCode = 0 // 请求成功
 
 // 通用错误码
 const (
-	_                      = iota
-	CodeServerUnknown      = -1000 - iota // 未知错误
-	CodeServerInvalidToken                // 无效的token
-	CodeClientReqInvalid                  // 请求参数错误
+	_                  = iota
+	ServerUnknown      = -1000 - iota // 未知错误
+	ServerInvalidToken                // 无效的token
+	ClientReqInvalid                  // 请求参数错误
 )
 
 // User错误码
 const (
-	CodeUserInvalidName   ErrorCode = -2000 - iota // 用户名格式不符合要求
-	CodeUserInvalidPass                            // 密码格式不符合要求
-	CodeUserORPasswordErr                          // 用户名或密码错误
-	CodeUserExist                                  // 用户名已存在
-	CodeUserNotExist                               // 用户不存在
-	CodeUserPwNotEqual                             // 用户两次输入的密码不相等
+	UserInvalidName   ErrorCode = -2000 - iota // 用户名格式不符合要求
+	UserInvalidPass                            // 密码格式不符合要求
+	UserORPasswordErr                          // 用户名或密码错误
+	UserExist                                  // 用户名已存在
+	UserNotExist                               // 用户不存在
+	UserPwNotEqual                             // 用户两次输入的密码不相等
 )
 
 // Article错误码
 const (
-	CodeArticleCreate  ErrorCode = -3000 - iota // 新建Article错误
-	CodeArticleUpdate                           // 更新Article错误
-	CodeArticleDelete                           // 删除Article错误
-	CodeArticleInvalid                          // Article不存在
+	ArticleCreate  ErrorCode = -3000 - iota // 新建Article错误
+	ArticleUpdate                           // 更新Article错误
+	ArticleDelete                           // 删除Article错误
+	ArticleInvalid                          // Article不存在
 )
 
 // Tag错误码
 const (
-	CodeTagCreate  ErrorCode = -4000 - iota // 新建Tag错误
-	CodeTagUpdate                           // 更新Tag错误
-	CodeTagDelete                           // 删除Tag错误
-	CodeTagInvalid                          // Tag不存在
+	TagCreate  ErrorCode = -4000 - iota // 新建Tag错误
+	TagUpdate                           // 更新Tag错误
+	TagDelete                           // 删除Tag错误
+	TagInvalid                          // Tag不存在
 )
 
 var codeMsgMap = map[ErrorCode]string{
-	CodeSuccess:            "成功",
-	CodeServerUnknown:      "未知错误",
-	CodeServerInvalidToken: "无效的token",
-	CodeClientReqInvalid:   "请求参数错误",
+	Success: "成功",
 
-	CodeUserInvalidName:   "用户名格式不符合要求",
-	CodeUserInvalidPass:   "密码格式不符合要求",
-	CodeUserORPasswordErr: "用户名或密码错误",
-	CodeUserExist:         "用户名已存在",
-	CodeUserNotExist:      "用户不存在",
-	CodeUserPwNotEqual:    "两次输入的密码不相等",
+	ServerUnknown:      "未知错误",
+	ServerInvalidToken: "无效的token",
+	ClientReqInvalid:   "请求参数错误",
 
-	CodeArticleCreate:  "新建Article错误",
-	CodeArticleUpdate:  "更新Article错误",
-	CodeArticleDelete:  "删除Article错误",
-	CodeArticleInvalid: "Article不存在",
+	UserInvalidName:   "用户名格式不符合要求",
+	UserInvalidPass:   "密码格式不符合要求",
+	UserORPasswordErr: "用户名或密码错误",
+	UserExist:         "用户名已存在",
+	UserNotExist:      "用户不存在",
+	UserPwNotEqual:    "两次输入的密码不相等",
 
-	CodeTagCreate:  "新建Tag错误",
-	CodeTagUpdate:  "更新Tag错误",
-	CodeTagDelete:  "删除Tag错误",
-	CodeTagInvalid: "Tag不存在",
+	ArticleCreate:  "新建Article错误",
+	ArticleUpdate:  "更新Article错误",
+	ArticleDelete:  "删除Article错误",
+	ArticleInvalid: "Article不存在",
+
+	TagCreate:  "新建Tag错误",
+	TagUpdate:  "更新Tag错误",
+	TagDelete:  "删除Tag错误",
+	TagInvalid: "Tag不存在",
 }
 
 const (
@@ -69,7 +70,7 @@ const (
 func (ei ErrorCode) GetMsg() string {
 	msg, ok := codeMsgMap[ei]
 	if !ok {
-		msg = codeMsgMap[CodeServerUnknown]
+		msg = codeMsgMap[ServerUnknown]
 	}
 	return msg
 }

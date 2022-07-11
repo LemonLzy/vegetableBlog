@@ -12,7 +12,7 @@ import (
 // SignUp 注册
 func SignUp(psu *api.ParamSignUp) error {
 	if psu.Password != psu.RePassword {
-		return errCode.NewClientError(errCode.CodeUserPwNotEqual)
+		return errCode.NewClientError(errCode.UserPwNotEqual)
 	}
 
 	// 判断用户名是否重复
@@ -50,7 +50,7 @@ func SignIn(psi *api.ParamSignIn) (*app.User, error) {
 	// 比较数据库存储加密的密码和用户输入的密码
 	equal := utils.BcryptCompare(userBySQL.Password, psi.Password)
 	if !equal {
-		return user, errCode.NewClientError(errCode.CodeUserORPasswordErr)
+		return user, errCode.NewClientError(errCode.UserORPasswordErr)
 	}
 
 	// 生成JWT token
@@ -71,7 +71,7 @@ func SignIn(psi *api.ParamSignIn) (*app.User, error) {
 // ModifyPw 更改密码
 func ModifyPw(pmp *api.ParamModifyPw) error {
 	if pmp.RePassword != pmp.RePassword2 {
-		return errCode.NewClientError(errCode.CodeUserPwNotEqual)
+		return errCode.NewClientError(errCode.UserPwNotEqual)
 	}
 
 	// 判断用户是否存在
@@ -87,7 +87,7 @@ func ModifyPw(pmp *api.ParamModifyPw) error {
 
 	equal := utils.BcryptCompare(pwBySQL, pmp.Password)
 	if !equal {
-		return errCode.NewClientError(errCode.CodeUserORPasswordErr)
+		return errCode.NewClientError(errCode.UserORPasswordErr)
 	}
 
 	// 密码加密

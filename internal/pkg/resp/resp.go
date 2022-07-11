@@ -21,7 +21,7 @@ func ResponseError(c *gin.Context, err error) {
 		code = errType.Code
 		msg = code.GetMsg()
 	} else {
-		code = errCode.CodeServerUnknown
+		code = errCode.ServerUnknown
 		msg = err.Error()
 	}
 
@@ -42,8 +42,8 @@ func ResponseErrorWithMsg(c *gin.Context, code errCode.ErrorCode, msg string) {
 
 func ResponseSuccess(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &ResponseData{
-		Code: errCode.CodeSuccess,
-		Msg:  errCode.CodeSuccess.GetMsg(),
+		Code: errCode.Success,
+		Msg:  errCode.Success.GetMsg(),
 		Data: data,
 	})
 }

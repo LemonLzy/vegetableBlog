@@ -43,7 +43,7 @@ func CheckUserByName(name string) (bool, error) {
 	}
 
 	if u.ID > 0 {
-		return true, errCode.NewClientError(errCode.CodeUserExist)
+		return true, errCode.NewClientError(errCode.UserExist)
 	}
 
 	return false, nil
@@ -61,7 +61,7 @@ func CheckUserByID(userID int64) (bool, error) {
 		return true, nil
 	}
 
-	return false, errCode.NewClientError(errCode.CodeUserNotExist)
+	return false, errCode.NewClientError(errCode.UserNotExist)
 }
 
 // GetUserByName 根据用户名查找用户
@@ -76,7 +76,7 @@ func GetUserByName(name string) (*User, error) {
 		return u, nil
 	}
 
-	return nil, errCode.NewClientError(errCode.CodeUserNotExist)
+	return nil, errCode.NewClientError(errCode.UserNotExist)
 }
 
 // GetUserPwByName 根据用户名查找用户密码
@@ -91,7 +91,7 @@ func GetUserPwByName(name string) (string, error) {
 		return u.Password, nil
 	}
 
-	return "", errCode.NewClientError(errCode.CodeUserNotExist)
+	return "", errCode.NewClientError(errCode.UserNotExist)
 }
 
 // GetUserPwByID 根据用户ID查找用户密码
@@ -106,7 +106,7 @@ func GetUserPwByID(userID int64) (string, error) {
 		return u.Password, nil
 	}
 
-	return "", errCode.NewClientError(errCode.CodeUserNotExist)
+	return "", errCode.NewClientError(errCode.UserNotExist)
 }
 
 // GetUserIDByName 根据用户名查找用户ID
@@ -121,5 +121,5 @@ func GetUserIDByName(name string) (int64, error) {
 		return u.UserID, nil
 	}
 
-	return 0, errCode.NewClientError(errCode.CodeUserNotExist)
+	return 0, errCode.NewClientError(errCode.UserNotExist)
 }
