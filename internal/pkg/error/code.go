@@ -1,13 +1,18 @@
 package errCode
 
-const Success ErrorCode = 0 // 请求成功
-
-// 通用错误码
+// 错误来源
 const (
-	_                  = iota
-	ServerUnknown      = -1000 - iota // 未知错误
-	ServerInvalidToken                // 无效的token
-	ClientReqInvalid                  // 请求参数错误
+	SourceUnknown string = "Unknown"
+	SourceClient  string = "Client"
+	SourceServer  string = "Server"
+)
+
+// 通用返回码
+const (
+	Success            ErrorCode = iota
+	ServerUnknown                = -1000 - iota // 未知错误
+	ServerInvalidToken                          // 无效的token
+	ClientReqInvalid                            // 请求参数错误
 )
 
 // User错误码
@@ -60,12 +65,6 @@ var code2msg = map[ErrorCode]string{
 	TagDelete:  "删除Tag错误",
 	TagInvalid: "Tag不存在",
 }
-
-const (
-	SourceUnknown string = "Unknown"
-	SourceClient  string = "Client"
-	SourceServer  string = "Server"
-)
 
 func (ei ErrorCode) GetMsg() string {
 	msg, ok := code2msg[ei]
