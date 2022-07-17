@@ -9,6 +9,7 @@ type Article struct {
 	ID        int    `json:"id,omitempty" gorm:"primary_key"`
 	TagID     int    `json:"tag_id,omitempty" gorm:"comment:标签ID;not null"`
 	Status    int8   `json:"status,omitempty" gorm:"comment:文章状态：0-草稿 1-已发布 2-已删除;default:0"`
+	UserID    int64  `json:"user_id,omitempty" gorm:"comment:用户唯一ID"`
 	ArticleID int64  `json:"article_id,omitempty" gorm:"index:idx_article_id,unique;comment:文章ID，便于url访问"`
 	Title     string `json:"title,omitempty" gorm:"type:varchar(30);comment:文章标题;not null"`
 	Path      string `json:"path,omitempty" gorm:"type:varchar(30);comment:文章路径;not null"`
@@ -62,4 +63,18 @@ func UpdateArticleByID(articleID int64, a *Article) error {
 		}
 	}
 	return nil
+}
+
+// GetArticlesByUserID 获取用户所有已发布的文章
+func GetArticlesByUserID(userID, page, size int64) ([]*Article, error) {
+	var articles []*Article
+	if err := DB.Debug().Select("tag_id", "article_id", "title", "summary", "cover", "created_at").
+		Where("user_id = ? AND status = ?", userID, 1).Offset(int((page - 1) * size)).
+		Order("created_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
+
+		if err != gorm.ErrRecordNotFound {
+			return nil, err
+		}
+	}
+	return articles, nil
 }

@@ -1,14 +1,16 @@
 package pkg
 
 import (
-	"github.com/gin-gonic/gin"
 	"strconv"
 )
 
-func GetPageInfo(c *gin.Context) (int64, int64) {
+// 固定每页10条记录，不可更改
+const pageSize = "10"
+
+func GetPageInfo() (int64, int64) {
 	// 获取分页参数
-	pageStr := c.Query("page")
-	sizeStr := c.Query("size")
+	pageStr := "1"
+	sizeStr := pageSize
 
 	page, err := strconv.ParseInt(pageStr, 10, 64)
 	if err != nil {

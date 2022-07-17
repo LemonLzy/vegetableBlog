@@ -91,7 +91,7 @@ func ArticleDetailHandler(c *gin.Context) {
 
 func ArticleListHandler(c *gin.Context) {
 	// 获取分页参数
-	page, size := pkg.GetPageInfo(c)
+	page, size := pkg.GetPageInfo()
 	// 获取列表数据
 	articleList, err := app.GetArticleList(page, size)
 	if err != nil {

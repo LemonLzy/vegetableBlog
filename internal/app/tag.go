@@ -6,3 +6,11 @@ type Tag struct {
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }
+
+// GetTags 获取所有的tag名称
+func GetTags() ([]string, error) {
+	var tagNames []string
+	DB.Debug().Model(&Tag{}).Pluck("name", &tagNames)
+
+	return tagNames, nil
+}

@@ -33,15 +33,17 @@ func Register(engine *gin.Engine) {
 	}
 
 	{
-		api.GET("/article/:id", handler.ArticleDetailHandler)
-		api.GET("/articles", handler.ArticleListHandler)
-		api.POST("/article", handler.ArticleCreateHandler)
-		api.PUT("/article/:id", handler.ArticleUpdateHandler)
+		api.GET("/toc/:userID", handler.UserFontPageHandler)
 	}
 
 	{
-		api.POST("/user", handler.UserCreateHandler)
-		api.PUT("/user/:id", handler.UserUpdateHandler)
+		api.GET("/article/:id", handler.ArticleDetailHandler)
+		api.GET("/articles", handler.ArticleListHandler)
+		api.POST("/article", handler.ArticleCreateHandler)
+		api.POST("/article/:id", handler.ArticleUpdateHandler)
+	}
+
+	{
 		api.POST("/user/modify_pw", handler.UserModifyPwHandler)
 		api.POST("/user/modify", handler.UserModifyHandler)
 	}
@@ -61,7 +63,7 @@ func getStaticPath() (string, string) {
 }
 
 func getCorsFunc() gin.HandlerFunc {
-	// 注意JWT认证时，放行请求头Authorization，避免跨域问题
+	// 注意JWT认证时，放行请求头Authorization，避免跨域问题(这里放行了所有请求头)
 	return cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
