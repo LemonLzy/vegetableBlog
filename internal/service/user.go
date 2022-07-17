@@ -39,32 +39,32 @@ func SignUp(psu *api.ParamSignUp) error {
 
 // SignIn 登录
 func SignIn(psi *api.ParamSignIn) (*app.User, error) {
-	user := new(app.User)
-
 	// 根据用户名查询加密密码
 	userBySQL, err := app.GetUserByName(psi.Username)
 	if err != nil {
-		return user, err
+		return nil, err
 	}
 
 	// 比较数据库存储加密的密码和用户输入的密码
 	equal := utils.BcryptCompare(userBySQL.Password, psi.Password)
 	if !equal {
-		return user, errCode.NewClientError(errCode.UserORPasswordErr)
+		return nil, errCode.NewClientError(errCode.UserORPasswordErr)
 	}
 
 	// 生成JWT token
 	aToken, rToken, err := middleware.GenToken(userBySQL.UserID, psi.Username)
 	if err != nil {
-		return user, err
+		return nil, err
 	}
 
-	// 组装响应的user结构体字段
-	user.UserID = userBySQL.UserID
-	user.Nickname = userBySQL.Nickname
-	user.IsAdmin = userBySQL.IsAdmin
-	user.AToken = aToken
-	user.RToken = rToken
+	// 组装响应的user结构体
+	user := &app.User{
+		UserID:   userBySQL.UserID,
+		Nickname: userBySQL.Nickname,
+		IsAdmin:  userBySQL.IsAdmin,
+		AToken:   aToken,
+		RToken:   rToken,
+	}
 	return user, nil
 }
 
