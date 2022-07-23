@@ -31,6 +31,7 @@ const (
 	ArticleUpdate                           // 更新Article错误
 	ArticleDelete                           // 删除Article错误
 	ArticleInvalid                          // Article不存在
+	ArticleStatus                           // Article状态错误
 )
 
 // Tag错误码
@@ -59,6 +60,7 @@ var code2msg = map[ErrorCode]string{
 	ArticleUpdate:  "更新Article错误",
 	ArticleDelete:  "删除Article错误",
 	ArticleInvalid: "Article不存在",
+	ArticleStatus:  "Article状态错误",
 
 	TagCreate:  "新建Tag错误",
 	TagUpdate:  "更新Tag错误",

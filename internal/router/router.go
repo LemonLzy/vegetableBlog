@@ -41,6 +41,7 @@ func Register(engine *gin.Engine) {
 		api.GET("/articles", handler.ArticleListHandler)
 		api.POST("/article", handler.ArticleCreateHandler)
 		api.POST("/article/:id", handler.ArticleUpdateHandler)
+		api.POST("/article/pub", handler.ArticlePubHandler)
 	}
 
 	{

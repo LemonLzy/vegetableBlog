@@ -6,6 +6,7 @@ import (
 	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/resp"
 	"github.com/lemonlzy/vegetableBlog/internal/service"
+	"github.com/lemonlzy/vegetableBlog/pkg"
 	"strconv"
 )
 
@@ -45,6 +46,10 @@ func UserSignInHandler(c *gin.Context) {
 	resp.ResponseSuccess(c, user)
 }
 
+// UserSignOutHandler 用户注销
+func UserSignOutHandler(c *gin.Context) {
+}
+
 // UserModifyHandler 用户修改基本信息
 func UserModifyHandler(c *gin.Context) {
 
@@ -78,18 +83,17 @@ func UserFontPageHandler(c *gin.Context) {
 		return
 	}
 
+	page, size := pkg.GetPageInfo(c)
 	// 文章信息
-	articles, err := service.ArticleCount(userID)
+	articles, err := service.ArticleCount(userID, page, size)
 
 	// tag信息
 	tags, err := service.TagCount()
 
 	// 用户基本信息
 
-	// 站点信息
-
 	// 信息组装
-	data := make(map[string]interface{}, 10)
+	data := make(map[string]interface{}, 4)
 	data["articles"] = articles
 	data["tags"] = tags
 	resp.ResponseSuccess(c, data)
