@@ -4,6 +4,7 @@ import (
 	"github.com/lemonlzy/vegetableBlog/internal/app"
 	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/snowflake"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/utils"
 )
 
 // ArticleCount 根据userID统计对应的文章信息
@@ -24,13 +25,6 @@ func ArticleCount(userID, page, size int64) ([]*app.Article, error) {
 
 // CreateArticle 创建文章
 func CreateArticle(a *app.Article) error {
-	// 摘要：截取前100个字符
-	var sum string
-	if len(a.Content) > 100 {
-		sum = a.Content[:100]
-	} else {
-		sum = a.Content
-	}
 	article := &app.Article{
 		TagID:     a.TagID,
 		Status:    a.Status,
@@ -38,7 +32,7 @@ func CreateArticle(a *app.Article) error {
 		ArticleID: snowflake.GenID(),
 		Title:     a.Title,
 		Path:      a.Path,
-		Summary:   sum,
+		Summary:   utils.SubStr(a.Content, 0, 100), // 摘要：截取前100个字符
 		Content:   a.Content,
 		RichText:  a.RichText,
 		Cover:     a.Cover,

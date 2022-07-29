@@ -89,7 +89,7 @@ func ArticleListHandler(c *gin.Context) {
 	// 获取分页参数
 	page, size := pkg.GetPageInfo(c)
 	// 获取列表数据
-	articleList, err := app.GetArticleList(page, size)
+	articleList, total, err := app.GetArticleList(page, size)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "获取文章列表失败",
@@ -97,15 +97,11 @@ func ArticleListHandler(c *gin.Context) {
 		return
 	}
 
-	data := make(map[string]interface{})
+	data := make(map[string]interface{}, 2)
 	data["list"] = articleList
-	data["total"], _ = app.GetArticleCount()
+	data["total"] = total
 
-	c.JSON(http.StatusOK, gin.H{
-		"code":    0,
-		"message": "成功",
-		"data":    data,
-	})
+	resp.ResponseSuccess(c, data)
 }
 
 func ArticlePubHandler(c *gin.Context) {

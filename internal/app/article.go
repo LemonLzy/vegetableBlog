@@ -52,14 +52,16 @@ func GetArticleByID(articleID int64) (*Article, error) {
 }
 
 // GetArticleList 获取所有文章
-func GetArticleList(page, size int64) ([]*Article, error) {
+func GetArticleList(page, size int64) ([]*Article, int, error) {
 	var articles []*Article
-	if err := DB.Debug().Where("status != ?", 2).Offset(int((page - 1) * size)).Order("updated_at desc").Limit(int(size)).Find(&articles).Error; err != nil {
+	if err := DB.Debug().Where("status != ?", 2).
+		Offset(int((page - 1) * size)).Order("updated_at desc").
+		Limit(int(size)).Find(&articles).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return nil, err
+			return nil, 0, err
 		}
 	}
-	return articles, nil
+	return articles, len(articles), nil
 }
 
 // UpdateArticleByID 更新文章信息
