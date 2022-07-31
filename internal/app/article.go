@@ -61,7 +61,12 @@ func GetArticleList(page, size int64) ([]*Article, int, error) {
 			return nil, 0, err
 		}
 	}
-	return articles, len(articles), nil
+
+	var count int64
+	if err := DB.Debug().Model(&Article{}).Where("status != ?", 2).Count(&count).Error; err != nil {
+		return nil, 0, err
+	}
+	return articles, int(count), nil
 }
 
 // UpdateArticleByID 更新文章信息

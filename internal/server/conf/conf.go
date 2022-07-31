@@ -2,13 +2,10 @@ package conf
 
 import (
 	"github.com/BurntSushi/toml"
+	"github.com/lemonlzy/vegetableBlog/configs"
 )
 
 var Conf = new(AppConfig)
-
-const (
-	configFilepath = "./configs/conf.toml"
-)
 
 type AppConfig struct {
 	Name      string `toml:"name"`
@@ -51,7 +48,7 @@ type CacheConfig struct {
 }
 
 func Init() error {
-	_, err := toml.DecodeFile(configFilepath, &Conf)
+	_, err := toml.DecodeFS(configs.EmbedConf, "conf.toml", &Conf)
 	if err != nil {
 		return err
 	}
