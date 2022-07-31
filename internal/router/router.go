@@ -47,7 +47,7 @@ func Register(engine *gin.Engine) {
 	{
 		api.POST("/user/modify_pw", handler.UserModifyPwHandler)
 		api.POST("/user/modify", handler.UserModifyHandler)
-		api.POST("/user/del", handler.UserModifyHandler)
+		api.POST("/user/del", handler.UserDelHandler)
 	}
 
 	oss := engine.Group("/oss")
