@@ -101,3 +101,17 @@ func ModifyPw(pmp *api.ParamModifyPw) error {
 
 	return nil
 }
+
+// UserDel 删除用户
+func UserDel(pd *api.ParamDel) error {
+	// 判断用户是否存在
+	if ok, err := app.CheckUserByID(pd.UserID); !ok || err != nil {
+		return err
+	}
+
+	// 删除用户
+	if err := app.DeleteUser(pd.UserID); err != nil {
+		return err
+	}
+	return nil
+}

@@ -20,3 +20,8 @@ type ParamModifyPw struct {
 	RePassword  string `json:"re_password,omitempty" binding:"required"`
 	RePassword2 string `json:"re_password2,omitempty" binding:"required"`
 }
+
+// ParamDel 删除用户请求参数
+type ParamDel struct {
+	UserID int64 `json:"user_id,omitempty" binding:"required"`
+}

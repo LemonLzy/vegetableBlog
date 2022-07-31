@@ -34,6 +34,15 @@ func UpdateUserByID(userID int64, u *User) error {
 	return err
 }
 
+// DeleteUser 根据用户id删除用户
+func DeleteUser(userID int64) error {
+	if err := DB.Debug().Where("user_id = ?", userID).Delete(&User{}).Error; err != nil {
+		// 日志记录
+		return err
+	}
+	return nil
+}
+
 // CheckUserByName 根据用户名检查用户是否存在
 func CheckUserByName(name string) (bool, error) {
 	var u User

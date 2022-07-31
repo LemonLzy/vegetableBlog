@@ -55,6 +55,24 @@ func UserModifyHandler(c *gin.Context) {
 
 }
 
+// UserDelHandler 用户删除
+func UserDelHandler(c *gin.Context) {
+	pd := new(api.ParamDel)
+	err := c.ShouldBindJSON(pd)
+	if err != nil {
+		resp.ResponseError(c, errCode.NewClientError(errCode.ClientReqInvalid))
+		return
+	}
+
+	err = service.UserDel(pd)
+	if err != nil {
+		resp.ResponseError(c, err)
+		return
+	}
+
+	resp.ResponseSuccess(c, nil)
+}
+
 // UserModifyPwHandler 用户修改密码
 func UserModifyPwHandler(c *gin.Context) {
 	pmp := new(api.ParamModifyPw)
