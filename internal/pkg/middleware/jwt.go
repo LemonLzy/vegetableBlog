@@ -23,7 +23,7 @@ var mySecret = []byte("show me the code.")
 type MyClaims struct {
 	UserID   int64  `json:"user_id"`
 	Username string `json:"username"`
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 // GenToken 生成JWT
@@ -39,9 +39,11 @@ func GenToken(userID int64, username string) (aToken, rToken string, err error) 
 	aToken, _ = jwt.NewWithClaims(jwt.SigningMethodHS512, c).SignedString(mySecret)
 
 	// refresh token
-	rToken, _ = jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.StandardClaims{
-		ExpiresAt: time.Now().Add(time.Millisecond * 30).Unix(),
-		Issuer:    Issuer,
+	rToken, _ = jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.RegisteredClaims{
+		ExpiresAt: &jwt.NumericDate{
+			Time: time.Now().Add(time.Millisecond * 30),
+		},
+		Issuer: Issuer,
 	}).SignedString(mySecret)
 	// 使用指定的secret签名并获得完整编码后的字符串token
 	return
