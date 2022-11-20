@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/internal/pkg/oss"
-	"net/http"
+	"github.com/lemonlzy/vegetableBlog/internal/pkg/resp"
 )
 
 func OssPostHandler(c *gin.Context) {
@@ -12,7 +12,7 @@ func OssPostHandler(c *gin.Context) {
 
 	for _, file := range files {
 		loc := oss.Put(file)
-		c.JSON(http.StatusOK, gin.H{
+		resp.ResponseSuccess(c, gin.H{
 			"location": loc,
 		})
 	}

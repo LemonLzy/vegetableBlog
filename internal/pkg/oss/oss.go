@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	FileDir = "test/"
+	FileDir = "blog/"
 )
 
 var (
@@ -74,5 +74,5 @@ func Put(fileHeader *multipart.FileHeader) string {
 	if err != nil {
 		fmt.Println(err)
 	}
-	return cosURL + filename
+	return cosURL + "/" + filename
 }

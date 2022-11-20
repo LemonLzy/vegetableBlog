@@ -11,7 +11,7 @@ type Article struct {
 	UserID    int64  `json:"user_id,omitempty" gorm:"comment:用户唯一ID"`
 	ArticleID int64  `json:"article_id,omitempty" gorm:"index:idx_article_id,unique;comment:文章ID，便于url访问"`
 	Title     string `json:"title,omitempty" gorm:"type:varchar(30);comment:文章标题;not null"`
-	Path      string `json:"path,omitempty" gorm:"type:varchar(30);comment:文章路径;not null"`
+	Path      string `json:"path,omitempty" gorm:"type:varchar(30);comment:文章路径;default:''"`
 	Summary   string `json:"summary,omitempty" gorm:"type:varchar(100);comment:文章摘要;not null"`
 	Content   string `json:"content,omitempty" gorm:"comment:文章内容;not null"`
 	RichText  string `json:"rich_text,omitempty" gorm:"comment:文章富文本内容;not null"`
