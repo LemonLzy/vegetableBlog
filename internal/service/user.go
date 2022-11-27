@@ -21,7 +21,7 @@ func SignUp(psu *api.ParamSignUp) error {
 	}
 
 	// 生成用户唯一标识ID
-	userID := snowflake.GenID()
+	userID := snowflake.GenID64()
 	// 密码加密
 	hashPw := utils.BcryptPw(psu.Password)
 	user := &app.User{

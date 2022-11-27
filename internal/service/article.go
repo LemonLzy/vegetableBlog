@@ -29,7 +29,7 @@ func CreateArticle(a *app.Article) error {
 		TagID:     a.TagID,
 		Status:    a.Status,
 		UserID:    a.UserID,
-		ArticleID: snowflake.GenID(),
+		ArticleID: snowflake.GenIDStr(),
 		Title:     a.Title,
 		Path:      a.Path,
 		Summary:   utils.SubStr(a.Content, 0, 100), // 摘要：截取前100个字符
@@ -46,7 +46,7 @@ func CreateArticle(a *app.Article) error {
 }
 
 // PubArticle 发布文章
-func PubArticle(articleID int64) error {
+func PubArticle(articleID string) error {
 	// 判断文章是否存在
 	a, err := app.GetArticleByID(articleID)
 	if err != nil {
