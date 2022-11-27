@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/lemonlzy/vegetableBlog/internal/app"
 	errCode "github.com/lemonlzy/vegetableBlog/internal/pkg/error"
@@ -61,8 +60,6 @@ func ArticleDetailHandler(c *gin.Context) {
 		resp.ResponseError(c, errCode.NewClientError(errCode.ArticleInvalid))
 		return
 	}
-
-	fmt.Println(articleInfo)
 	resp.ResponseSuccess(c, articleInfo)
 }
 
