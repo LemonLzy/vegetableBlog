@@ -43,7 +43,7 @@ func GetArticleCount() (int, error) {
 // GetArticleByID 根据文章id获取文章详情
 func GetArticleByID(articleID string) (*Article, error) {
 	a := new(Article)
-	if err := DB.Debug().Select("title, content").Where("article_id = ?", articleID).First(&a).Error; err != nil {
+	if err := DB.Debug().Select("title, content, cover").Where("article_id = ?", articleID).First(&a).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return nil, err
 		}

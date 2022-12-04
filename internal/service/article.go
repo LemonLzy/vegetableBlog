@@ -32,7 +32,7 @@ func CreateArticle(a *app.Article) error {
 		ArticleID: snowflake.GenIDStr(),
 		Title:     a.Title,
 		Path:      a.Path,
-		Summary:   utils.SubStr(a.Content, 0, 100), // 摘要：截取前100个字符
+		Summary:   getSummary(a.Content),
 		Content:   a.Content,
 		RichText:  a.RichText,
 		Cover:     a.Cover,
@@ -68,4 +68,9 @@ func PubArticle(articleID string) error {
 // UpdateArticle 更新文章
 func UpdateArticle(a *app.Article) error {
 	return nil
+}
+
+// getSummary 移除HTML标签后，截取前n个字符
+func getSummary(content string) string {
+	return utils.SubStr(utils.RemoveHTML(content), 0, 100)
 }
