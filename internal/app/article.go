@@ -18,6 +18,12 @@ type Article struct {
 	Cover     string `json:"cover,omitempty" gorm:"type:varchar(100);comment:封面图片"`
 	CreatedAT int64  `json:"created_at,omitempty" gorm:"autoCreateTime"`
 	UpdatedAT int64  `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
+	DeletedAT int64  `json:"deleted_at,omitempty" gorm:"autoDeleteTime"`
+}
+
+type Archive struct {
+	Month string `json:"month"`
+	Count int8   `json:"count"`
 }
 
 // CreateArticle 创建文章
@@ -43,7 +49,7 @@ func GetArticleCount() (int, error) {
 // GetArticleByID 根据文章id获取文章详情
 func GetArticleByID(articleID string) (*Article, error) {
 	a := new(Article)
-	if err := DB.Debug().Select("title, content, cover").Where("article_id = ?", articleID).First(&a).Error; err != nil {
+	if err := DB.Debug().Select("title, content, cover, created_at, updated_at").Where("article_id = ?", articleID).First(&a).Error; err != nil {
 		if err != gorm.ErrRecordNotFound {
 			return nil, err
 		}
@@ -55,7 +61,7 @@ func GetArticleByID(articleID string) (*Article, error) {
 // GetArticleList 获取所有文章
 func GetArticleList(page, size int64) ([]*Article, int, error) {
 	var articles []*Article
-	if err := DB.Debug().Where("status != ?", 2).
+	if err := DB.Debug().Where("status = ?", 1).
 		Offset(int((page - 1) * size)).Order("updated_at desc").
 		Limit(int(size)).Find(&articles).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -64,10 +70,23 @@ func GetArticleList(page, size int64) ([]*Article, int, error) {
 	}
 
 	var count int64
-	if err := DB.Debug().Model(&Article{}).Where("status != ?", 2).Count(&count).Error; err != nil {
+	if err := DB.Debug().Model(&Article{}).Where("status = ?", 1).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 	return articles, int(count), nil
+}
+
+// GetArticleArchive 获取归档文章统计
+func GetArticleArchive() ([]*Archive, error) {
+	var archive []*Archive
+	if err := DB.Debug().Model(&Article{}).Select("FROM_UNIXTIME(created_at,'%Y-%m') as month,count(article_id) as count").
+		Where("status = ?", 1).Group("month").Order("month desc").Find(&archive).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return archive, err
+		}
+	}
+
+	return archive, nil
 }
 
 // UpdateArticleByID 更新文章信息

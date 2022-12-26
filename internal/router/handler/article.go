@@ -82,6 +82,21 @@ func ArticleListHandler(c *gin.Context) {
 	resp.ResponseSuccess(c, data)
 }
 
+func ArticleArchiveHandler(c *gin.Context) {
+	// 获取归档数据
+	archive, err := app.GetArticleArchive()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "获取归档列表失败",
+		})
+		return
+	}
+
+	data := make(map[string]interface{}, 1)
+	data["list"] = archive
+	resp.ResponseSuccess(c, data)
+}
+
 func ArticlePubHandler(c *gin.Context) {
 	a := &app.Article{}
 	if err := c.ShouldBindJSON(a); err != nil {

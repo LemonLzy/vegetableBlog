@@ -39,6 +39,7 @@ func Register(engine *gin.Engine) {
 	{
 		api.GET("/article/:articleID", handler.ArticleDetailHandler)
 		api.GET("/articles", handler.ArticleListHandler)
+		api.GET("/articles/archive", handler.ArticleArchiveHandler)
 		api.POST("/article", handler.ArticleCreateHandler)
 		api.POST("/article/:id", handler.ArticleUpdateHandler)
 		api.POST("/article/pub", handler.ArticlePubHandler)
@@ -48,7 +49,11 @@ func Register(engine *gin.Engine) {
 		api.POST("/user/modify_pw", handler.UserModifyPwHandler)
 		api.POST("/user/modify", handler.UserModifyHandler)
 		api.POST("/user/del", handler.UserDelHandler)
+	}
 
+	{
+		// TODO 用户配置相关信息
+		//api.POST("/config", handler.UserConfigHandler)
 	}
 
 	{
